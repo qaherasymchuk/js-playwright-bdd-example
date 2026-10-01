@@ -1,0 +1,15 @@
+{
+  "name": "js-playwright-bdd-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "demo": "node demo-app/server.js",
+    "test": "bddgen && playwright test",
+    "test:ui": "bddgen && playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "playwright-bdd": "^9.2.1"
+  }
+}
