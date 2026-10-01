@@ -1,0 +1,4 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","5639","A missing todo shows failure evidence","chromium","2026-10-01","failed","2026-10-01","Todos","features/todos.feature.spec.js","",""
+"","446","The list starts empty","chromium","2026-10-01","passed","2026-10-01","Todos","features/todos.feature.spec.js","",""
+"","572","Adding a todo shows it in the list","chromium","2026-10-01","passed","2026-10-01","Todos","features/todos.feature.spec.js","",""
