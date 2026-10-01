@@ -4,10 +4,26 @@ on:
   pull_request:
   schedule:
     # 01:00 UTC, which is 03:00 in Europe/Kyiv.
-    - cron: "0 1 * * *"
+    - cron: '0 1 * * *'
 
 jobs:
+  lint:
+    if: github.event_name == 'pull_request'
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+
   smoke:
+    needs: lint
     if: github.event_name == 'pull_request'
     name: Smoke
     runs-on: ubuntu-latest

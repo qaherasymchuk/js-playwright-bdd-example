@@ -2,7 +2,9 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
-const indexPath = fileURLToPath(new URL('./public/index.html', import.meta.url));
+const indexPath = fileURLToPath(
+  new URL('./public/index.html', import.meta.url),
+);
 const port = Number(process.env.PORT || 3000);
 
 const server = createServer(async (req, res) => {

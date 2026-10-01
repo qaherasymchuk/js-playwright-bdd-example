@@ -21,6 +21,8 @@ export class TodoPage {
   }
 
   async complete(text) {
-    await this.item(text).getByRole('checkbox', { name: `Complete ${text}` }).check();
+    await this.item(text)
+      .getByRole('checkbox', { name: `Complete ${text}` })
+      .check();
   }
 }

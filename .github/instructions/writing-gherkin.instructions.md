@@ -1,7 +1,7 @@
 ---
 name: writing-gherkin
 description: Gherkin rules for one behavior per scenario, in Given-When-Then order.
-applyTo: "**/*.feature,src/steps/**/*.js"
+applyTo: '**/*.feature,src/steps/**/*.js'
 ---
 
 # Writing good Gherkin
@@ -37,7 +37,6 @@ Feature: Todos
     Given the todo app is open
     When the user adds a todo "Buy milk"
     Then the todo "Buy milk" is shown
-
 
   Scenario: The list starts empty
     When the user opens the todo app
