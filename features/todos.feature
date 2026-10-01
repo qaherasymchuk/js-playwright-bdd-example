@@ -1,16 +1,19 @@
 Feature: Todos
 
+  @smoke
   Scenario: Adding a todo shows it in the list
-    Given I open the todo app
-    When I add a todo "Buy milk"
-    Then I see the todo "Buy milk"
+    Given the todo app is open
+    When the user adds a todo "Buy milk"
+    Then the todo "Buy milk" is shown
+
 
   Scenario: Completing a todo marks it done
-    Given I open the todo app
-    And I add a todo "Walk the dog"
-    When I complete the todo "Walk the dog"
+    Given the todo "Walk the dog" is in the list
+    When the user completes the todo "Walk the dog"
     Then the todo "Walk the dog" is completed
 
+
+  @smoke
   Scenario: The list starts empty
-    Given I open the todo app
-    Then I see no todos
+    When the user opens the todo app
+    Then no todos are shown

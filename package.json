@@ -5,6 +5,8 @@
   "scripts": {
     "demo": "node demo-app/server.js",
     "test": "bddgen && playwright test",
+    "test:smoke": "bddgen && playwright test --grep @smoke",
+    "test:regression": "bddgen && playwright test",
     "test:ui": "bddgen && playwright test --ui",
     "report": "playwright show-report"
   },
