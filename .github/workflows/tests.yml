@@ -28,6 +28,8 @@ jobs:
     name: Smoke
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -36,12 +38,61 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:smoke
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+      - name: Run smoke tests
+        run: npm run test:smoke
+      - name: Fetch Allure history
+        if: always()
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+      - name: Restore Allure history
+        if: always()
+        run: |
+          mkdir -p allure-results/history
+          if [ -d gh-pages/smoke/history ]; then
+            cp -a gh-pages/smoke/history/. allure-results/history/
+          fi
+      - name: Set up Java
+        if: always()
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Build Allure report
+        if: always()
+        run: npm run allure:report
+      - name: Prepare report site
+        if: always()
+        run: |
+          mkdir -p site/smoke
+          cp -a allure-report/. site/smoke/
+          cp .github/allure-index.html site/index.html
+      - name: Publish Allure report
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: site
+          keep_files: true
+          commit_message: Publish smoke Allure report
+      - name: Add report link
+        if: always()
+        run: |
+          echo "### Allure report" >> "$GITHUB_STEP_SUMMARY"
+          echo "[Smoke](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/smoke/) keeps history across runs." >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload reports and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: smoke-report
-          path: playwright-report/
+          path: |
+            allure-report/
+            allure-results/
+            playwright-report/
+            test-results/
           retention-days: 7
 
   regression:
@@ -49,6 +100,8 @@ jobs:
     name: Regression
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -57,10 +110,59 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:regression
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+      - name: Run regression tests
+        run: npm run test:regression
+      - name: Fetch Allure history
+        if: always()
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+      - name: Restore Allure history
+        if: always()
+        run: |
+          mkdir -p allure-results/history
+          if [ -d gh-pages/regression/history ]; then
+            cp -a gh-pages/regression/history/. allure-results/history/
+          fi
+      - name: Set up Java
+        if: always()
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Build Allure report
+        if: always()
+        run: npm run allure:report
+      - name: Prepare report site
+        if: always()
+        run: |
+          mkdir -p site/regression
+          cp -a allure-report/. site/regression/
+          cp .github/allure-index.html site/index.html
+      - name: Publish Allure report
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: site
+          keep_files: true
+          commit_message: Publish regression Allure report
+      - name: Add report link
+        if: always()
+        run: |
+          echo "### Allure report" >> "$GITHUB_STEP_SUMMARY"
+          echo "[Regression](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/regression/) keeps history across runs." >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload reports and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: regression-report
-          path: playwright-report/
+          path: |
+            allure-report/
+            allure-results/
+            playwright-report/
+            test-results/
           retention-days: 14

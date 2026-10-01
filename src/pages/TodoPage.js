@@ -4,7 +4,7 @@ export class TodoPage {
     this.input = page.getByLabel('New todo');
     this.addButton = page.getByRole('button', { name: 'Add' });
     this.items = page.getByRole('listitem');
-    this.emptyMessage = page.getByText('No todos yet');
+    this.emptyMessage = page.getByTestId('empty-message');
   }
 
   async open() {

@@ -15,3 +15,9 @@ Feature: Todos
   Scenario: The list starts empty
     When the user opens the todo app
     Then no todos are shown
+
+  @smoke
+  Scenario: A missing todo shows failure evidence
+    Given the todo app is open
+    When the scenario log is written
+    Then the todo "This todo was never added" is shown

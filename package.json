@@ -11,6 +11,7 @@
     "test": "bddgen && playwright test",
     "test:smoke": "bddgen && playwright test --grep @smoke",
     "test:regression": "bddgen && playwright test",
+    "allure:report": "allure generate allure-results --clean -o allure-report",
     "test:ui": "bddgen && playwright test --ui",
     "report": "playwright show-report"
   },
@@ -30,6 +31,8 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",
+    "allure-commandline": "^2.46.1",
+    "allure-playwright": "^3.13.0",
     "eslint": "^10.11.0",
     "gherkin-lint-plus": "^1.0.2",
     "globals": "^17.13.0",

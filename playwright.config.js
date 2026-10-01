@@ -11,10 +11,17 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  reporter: 'html',
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+    ['allure-playwright', { resultsDir: 'allure-results' }],
+    ...(process.env.CI ? [['github']] : []),
+  ],
   use: {
     baseURL: 'http://127.0.0.1:3000',
-    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    trace: 'retain-on-failure',
   },
   webServer: {
     command: 'node demo-app/server.js',

@@ -32,7 +32,7 @@
       <input id="new-todo" name="todo" required />
       <button type="submit">Add</button>
     </form>
-    <p id="empty">No todos yet</p>
+    <p id="empty" role="status" data-testid="empty-message">No todos yet</p>
     <ul id="todo-list"></ul>
     <script>
       const form = document.querySelector('#todo-form');
