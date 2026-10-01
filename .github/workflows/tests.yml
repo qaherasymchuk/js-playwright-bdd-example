@@ -36,9 +36,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - id: tests
+      - name: Run smoke tests
         run: npm run test:smoke
-        continue-on-error: true
       - name: Set up Java
         if: always()
         uses: actions/setup-java@v4
@@ -59,9 +58,6 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 7
-      - name: Fail when tests fail
-        if: steps.tests.outcome == 'failure'
-        run: exit 1
 
   regression:
     if: github.event_name == 'schedule'
@@ -76,9 +72,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - id: tests
+      - name: Run regression tests
         run: npm run test:regression
-        continue-on-error: true
       - name: Set up Java
         if: always()
         uses: actions/setup-java@v4
@@ -99,6 +94,3 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 14
-      - name: Fail when tests fail
-        if: steps.tests.outcome == 'failure'
-        run: exit 1
