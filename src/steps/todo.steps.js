@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { Given, When, Then } from '../fixtures/index.js';
 
 Given('the todo app is open', async ({ todoPage }) => {
@@ -12,6 +12,19 @@ Given('the todo {string} is in the list', async ({ todoPage }, text) => {
 
 When('the user opens the todo app', async ({ todoPage }) => {
   await todoPage.open();
+});
+
+When('the scenario log is written', async ({ todoPage }) => {
+  const body = [
+    `url: ${todoPage.page.url()}`,
+    `todo rows: ${await todoPage.items.count()}`,
+    'expected a todo that was never added',
+  ].join('\n');
+  console.log(body);
+  await test.info().attach('scenario.log', {
+    body,
+    contentType: 'text/plain',
+  });
 });
 
 When('the user adds a todo {string}', async ({ todoPage }, text) => {

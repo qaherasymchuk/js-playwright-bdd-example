@@ -36,13 +36,32 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:smoke
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+      - id: tests
+        run: npm run test:smoke
+        continue-on-error: true
+      - name: Set up Java
+        if: always()
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Build Allure report
+        if: always()
+        run: npm run allure:report
+      - name: Upload reports and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: smoke-report
-          path: playwright-report/
+          path: |
+            allure-report/
+            allure-results/
+            playwright-report/
+            test-results/
           retention-days: 7
+      - name: Fail when tests fail
+        if: steps.tests.outcome == 'failure'
+        run: exit 1
 
   regression:
     if: github.event_name == 'schedule'
@@ -57,10 +76,29 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:regression
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+      - id: tests
+        run: npm run test:regression
+        continue-on-error: true
+      - name: Set up Java
+        if: always()
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Build Allure report
+        if: always()
+        run: npm run allure:report
+      - name: Upload reports and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: regression-report
-          path: playwright-report/
+          path: |
+            allure-report/
+            allure-results/
+            playwright-report/
+            test-results/
           retention-days: 14
+      - name: Fail when tests fail
+        if: steps.tests.outcome == 'failure'
+        run: exit 1
