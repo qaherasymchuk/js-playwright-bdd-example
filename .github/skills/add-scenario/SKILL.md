@@ -14,7 +14,7 @@ Add one behavior. Follow `.github/instructions/writing-gherkin.instructions.md` 
 1. Add the scenario to `features/todos.feature`, or a new file under `features/` if it is a different feature.
 2. Reuse an existing step phrase when the words already exist in `src/steps/`.
 3. For a new phrase, add one step in `src/steps/`. Import `Given`, `When`, and `Then` from `src/fixtures/index.js`. Call a page-object method. Put `expect` only in `Then` steps.
-4. Put locators and interactions on the page object, using `getByRole`, `getByLabel`, or `getByText`. Add a new fixture in `src/fixtures/index.js` only when the scenario needs a new page object.
+4. Put locators and interactions on the page object. Follow `.github/instructions/adding-locators.instructions.md`: `getByTestId` only, never `getByText`. Add a new fixture in `src/fixtures/index.js` only when the scenario needs a new page object.
 5. Run `npx bddgen && npx playwright test` and fix the layer that failed.
 
 ## Shape

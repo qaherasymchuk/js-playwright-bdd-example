@@ -31,6 +31,6 @@ Then('the todo {string} is completed', async ({ todoPage }, text) => {
 });
 
 Then('no todos are shown', async ({ todoPage }) => {
-  await expect(todoPage.emptyMessage).toBeVisible();
   await expect(todoPage.items).toHaveCount(0);
+  await expect(todoPage.emptyMessage).toBeVisible();
 });
